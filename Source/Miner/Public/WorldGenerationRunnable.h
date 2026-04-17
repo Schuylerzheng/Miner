@@ -47,7 +47,7 @@ protected:
 	* This is nessesary so that a world generates the same everytime.
 	*/
 	FVector2D FindMasterVertexOfPlate(FVector2D BoarderLocation);
-	ECollisionType ArePlatesColliding(EPlateDirection Plate1Direction, EPlateDirection Plate2Direction);
+	ECollisionType ArePlatesColliding(FVector2D MasterVertexLocation1, FVector2D MasterVertexLocation2);
 	FPlateVertexLocations FindBothPlateVertexLocations(FVector2D Vertex);
 	bool IsNextToBlack(FVector2D VertexLocation);
 

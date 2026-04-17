@@ -15,9 +15,10 @@ enum class EPlateDirection : uint8
 UENUM(BlueprintType)
 enum class ECollisionType : uint8
 {
-	None,
 	Push,
-	Pull
+	Pull,
+	Slide,    // Not implemented yet, and needs direction
+	None
 };
 
 USTRUCT(BlueprintType)

@@ -1,7 +1,6 @@
 // Copyright Schuyler Zheng. All Rights Reserved.
 
 #include "WorldGenerationRunnable.h"
-#include <set>
 #include "WorldLandscape.h"
 #include "ThirdPartyLibraries/FastNoiseLite.h"
 
@@ -127,34 +126,34 @@ void FWorldGenerationRunnable::ApplyPlateTectonics()
 		FVector2D WorldVertexLocation = FVector2D(LocalVertexLocation.X + LocalClientPawnLocation.X / 50, LocalVertexLocation.Y + LocalClientPawnLocation.Y / 50);
 		
 		double CurrentNoiseValue = FMath::Abs(OwnerLandscape->PlateTectonicsNoise->GetNoise(WorldVertexLocation.X, WorldVertexLocation.Y));    // For some reason the noise can be negative, so make it absolute value
-		if (CurrentNoiseValue >= OwnerLandscape->PlateBoarderThreshhold) {
-			bool KeepCheckingForNextPlateOver = true;
-			FPlateVertexLocations PlateVertexLocations = FindBothPlateVertexLocations(WorldVertexLocation);
-			FVector2d MasterVertexLocation1 = FindMasterVertexOfPlate(PlateVertexLocations.Plate1VertexLocation);
-			FVector2d MasterVertexLocation2 = FindMasterVertexOfPlate(PlateVertexLocations.Plate2VertexLocation);
-			FRandomStream Plate1RandomStream(MasterVertexLocation1.X * MasterVertexLocation1.Y);    // Not the best way of making a random seed for the random generator, but that is for later. 
-			FRandomStream Plate2RandomStream(MasterVertexLocation2.X * MasterVertexLocation2.Y);
-			EPlateDirection Plate1Direction = (EPlateDirection)Plate1RandomStream.RandRange(1, 4);    // Switch to frandomstream for this too
-			EPlateDirection Plate2Direction = (EPlateDirection)Plate2RandomStream.RandRange(1, 4);
-			double PlateSpeed1 = Plate1RandomStream.RandRange(OwnerLandscape->MinPlateSpeed, OwnerLandscape->MaxPlateSpeed);
-			double PlateSpeed2 = Plate2RandomStream.RandRange(OwnerLandscape->MinPlateSpeed, OwnerLandscape->MaxPlateSpeed);
+		bool KeepCheckingForNextPlateOver = true;
+		FPlateVertexLocations PlateVertexLocations = FindBothPlateVertexLocations(WorldVertexLocation);
+		FVector2d MasterVertexLocation1 = FindMasterVertexOfPlate(PlateVertexLocations.Plate1VertexLocation);
+		FVector2d MasterVertexLocation2 = FindMasterVertexOfPlate(PlateVertexLocations.Plate2VertexLocation);
+		FRandomStream Plate1RandomStream(MasterVertexLocation1.X * MasterVertexLocation1.Y);    // Not the best way of making a random seed for the random generator, but that is for later. 
+		FRandomStream Plate2RandomStream(MasterVertexLocation2.X * MasterVertexLocation2.Y);
+		double PlateSpeed1 = Plate1RandomStream.RandRange(OwnerLandscape->MinPlateSpeed, OwnerLandscape->MaxPlateSpeed);
+		double PlateSpeed2 = Plate2RandomStream.RandRange(OwnerLandscape->MinPlateSpeed, OwnerLandscape->MaxPlateSpeed);
 
-			switch (ArePlatesColliding(Plate1Direction, Plate2Direction))
-			{
+		switch (ArePlatesColliding(MasterVertexLocation1, MasterVertexLocation2))
+		{
 			case ECollisionType::Push:
 				FinalHeight += CurrentNoiseValue * OwnerLandscape->PlateTectonicsHeightScale * FMath::Fmod(PlateSpeed1 + PlateSpeed2, OwnerLandscape->MaxPlateSpeed);
 				break;
 			case ECollisionType::Pull:
 				FinalHeight -= CurrentNoiseValue * OwnerLandscape->PlateTectonicsHeightScale * FMath::Fmod(PlateSpeed1 + PlateSpeed2, OwnerLandscape->MaxPlateSpeed);
 				break;
+			case ECollisionType::Slide:
+				// Tmp copilot thing
+				FinalHeight += (CurrentNoiseValue * OwnerLandscape->PlateTectonicsHeightScale * FMath::Fmod(FMath::Abs(PlateSpeed1 - PlateSpeed2), OwnerLandscape->MaxPlateSpeed)) / 2.0f;
+				break;
 			default:
 				// None collision type
 				break;
-			}
 		}
 
 		return FinalHeight;
-		});
+	});
 }
 
 void FWorldGenerationRunnable::FinalizeLandMesh()
@@ -267,17 +266,159 @@ FVector2D FWorldGenerationRunnable::FindMasterVertexOfPlate(FVector2D BoarderVer
 	return MostTopLeftPoint;
 }
 
-ECollisionType FWorldGenerationRunnable::ArePlatesColliding(EPlateDirection Plate1Direction, EPlateDirection Plate2Direction)
+ECollisionType FWorldGenerationRunnable::ArePlatesColliding(FVector2D MasterVertexLocation1, FVector2D MasterVertexLocation2)
 {
 	TRACE_CPUPROFILER_EVENT_SCOPE(ArePlatesColliding);
 
-	// Tmp return push
-	return ECollisionType::Push;
+	// Create deterministic directions based on master locations
+	FRandomStream Plate1RandomStream(MasterVertexLocation1.X * MasterVertexLocation1.Y);
+	FRandomStream Plate2RandomStream(MasterVertexLocation2.X * MasterVertexLocation2.Y);
+
+	// Ensure we produce valid enum values (0..3)
+	EPlateDirection Plate1Direction = static_cast<EPlateDirection>(Plate1RandomStream.RandRange(0, 3));
+	EPlateDirection Plate2Direction = static_cast<EPlateDirection>(Plate2RandomStream.RandRange(0, 3));
+
+	// Vector from plate1 to plate2
+	const FVector2D Delta = MasterVertexLocation2 - MasterVertexLocation1;
+
+	// If points coincide, fallback to Pull (consistent with previous default)
+	if (FMath::IsNearlyZero(Delta.X) && FMath::IsNearlyZero(Delta.Y)) {
+		return ECollisionType::Pull;
+	}
+
+	// Choose primary axis of separation
+	const bool bHorizontalSeparation = FMath::Abs(Delta.X) >= FMath::Abs(Delta.Y);
+
+	// Helper lambdas for direction checks (ok copilot?)
+	auto IsTowardEachOther_EW = [&](bool bMaster2IsEast) -> bool {
+		if (bMaster2IsEast) {
+			return (Plate1Direction == EPlateDirection::East && Plate2Direction == EPlateDirection::West);
+		} else {
+			return (Plate1Direction == EPlateDirection::West && Plate2Direction == EPlateDirection::East);
+		}
+	};
+	auto IsAwayFromEachOther_EW = [&](bool bMaster2IsEast) -> bool {
+		if (bMaster2IsEast) {
+			return (Plate1Direction == EPlateDirection::West && Plate2Direction == EPlateDirection::East);
+		} else {
+			return (Plate1Direction == EPlateDirection::East && Plate2Direction == EPlateDirection::West);
+		}
+	};
+	auto IsTowardEachOther_NS = [&](bool bMaster2IsNorth) -> bool {
+		if (bMaster2IsNorth) {
+			return (Plate1Direction == EPlateDirection::North && Plate2Direction == EPlateDirection::South);
+		} else {
+			return (Plate1Direction == EPlateDirection::South && Plate2Direction == EPlateDirection::North);
+		}
+	};
+	auto IsAwayFromEachOther_NS = [&](bool bMaster2IsNorth) -> bool {
+		if (bMaster2IsNorth) {
+			return (Plate1Direction == EPlateDirection::South && Plate2Direction == EPlateDirection::North);
+		} else {
+			return (Plate1Direction == EPlateDirection::North && Plate2Direction == EPlateDirection::South);
+		}
+	};
+
+	if (bHorizontalSeparation) {
+		const bool bMaster2IsEast = Delta.X > 0.0;
+		if (IsTowardEachOther_EW(bMaster2IsEast)) {
+			return ECollisionType::Push;
+		}
+		if (IsAwayFromEachOther_EW(bMaster2IsEast)) {
+			return ECollisionType::Pull;
+		}
+	} else {
+		const bool bMaster2IsNorth = Delta.Y > 0.0;
+		if (IsTowardEachOther_NS(bMaster2IsNorth)) {
+			return ECollisionType::Push;
+		}
+		if (IsAwayFromEachOther_NS(bMaster2IsNorth)) {
+			return ECollisionType::Pull;
+		}
+	}
+
+	// Parallel same-direction movement or perpendicular movement -> slide (or no strong push/pull)
+	if (Plate1Direction == Plate2Direction) {
+		return ECollisionType::Slide;
+	}
+
+	// Unimplemented for now
+	return ECollisionType::Slide;
 }
 
 FPlateVertexLocations FWorldGenerationRunnable::FindBothPlateVertexLocations(FVector2D Vertex)
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE(FindBothPlateVertexLocations);
+
 	FPlateVertexLocations PlateVertexLocations;
+
+	if (!IsValid(OwnerLandscape)) {
+		PlateVertexLocations.Plate1VertexLocation = Vertex;
+		PlateVertexLocations.Plate2VertexLocation = Vertex;
+		return PlateVertexLocations;
+	}
+
+	// Directions to probe (cardinal + diagonals)
+	const TArray<FVector2D> ProbeDirs = {
+		FVector2D(1, 0), FVector2D(-1, 0),
+		FVector2D(0, 1), FVector2D(0, -1),
+		FVector2D(1, 1), FVector2D(-1, 1),
+		FVector2D(1, -1), FVector2D(-1, -1)
+	};
+
+	TArray<FVector2D> Candidates;
+	const double StepDistance = OwnerLandscape->Resolution;
+	// If MasterVertexCheckAttempts <= 0 the code elsewhere treats that as "no limit".
+	// Cap search to a reasonable maximum to avoid runaway loops here.
+	const int32 MaxSteps = (OwnerLandscape->MasterVertexCheckAttempts > 0) ? OwnerLandscape->MasterVertexCheckAttempts : 1000;
+
+	for (const FVector2D& Dir : ProbeDirs)
+	{
+		for (int32 Step = 1; Step <= MaxSteps; ++Step)
+		{
+			const FVector2D Current = Vertex + Dir * (StepDistance * (double)Step);
+			const double NoiseSample = OwnerLandscape->PlateTectonicsNoise->GetNoise(Current.X, Current.Y);
+
+			// We're looking for border vertices (noise >= threshold) that are adjacent to "black" (non-border).
+			if (NoiseSample >= OwnerLandscape->PlateBoarderThreshhold && IsNextToBlack(Current))
+			{
+				// Add unique candidates only (with a small epsilon to avoid duplicates)
+				bool bAlreadyHave = false;
+				const double Epsilon = StepDistance * 0.5;
+				for (const FVector2D& Existing : Candidates)
+				{
+					if (FMath::Square(FVector2D::Distance(Existing, Current)) <= (Epsilon * Epsilon))
+					{
+						bAlreadyHave = true;
+						break;
+					}
+				}
+				if (!bAlreadyHave)
+				{
+					Candidates.Add(Current);
+				}
+
+				// Found the nearest border point along this probe direction -> stop probing further in this direction
+				break;
+			}
+		}
+	}
+
+	// Fallback: if no candidates found, use the provided vertex for both
+	if (Candidates.Num() == 0)
+	{
+		PlateVertexLocations.Plate1VertexLocation = Vertex;
+		PlateVertexLocations.Plate2VertexLocation = Vertex;
+		return PlateVertexLocations;
+	}
+
+	// Sort candidates by distance to the original vertex (closest first)
+	Candidates.Sort([&](const FVector2D& A, const FVector2D& B) {
+		return FMath::Square(FVector2D::Distance(A, Vertex)) < FMath::Square(FVector2D::Distance(B, Vertex));
+	});
+
+	PlateVertexLocations.Plate1VertexLocation = Candidates[0];
+	PlateVertexLocations.Plate2VertexLocation = (Candidates.Num() > 1) ? Candidates[1] : Candidates[0];
 
 	return PlateVertexLocations;
 }

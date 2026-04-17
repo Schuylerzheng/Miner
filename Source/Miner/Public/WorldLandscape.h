@@ -69,7 +69,7 @@ public:
 	FTerrainDataGeneratedSignature ApplyTerrainDataDelegate;
 
 protected:
-	virtual void BeginPlay() override;
+	virtual void BeginPlay() override; 
 	virtual void Tick(float DeltaTime) override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
@@ -102,8 +102,8 @@ protected:
 	FastNoiseLite* PlateTectonicsNoise = nullptr;
 
 	//===============================================================================================================
-	// Landscape Settings
-	UPROPERTY(EditDefaultsOnly, Category = "Landscape", meta = (ToolTip = "The number that controls all randomness"))
+	// Landscape Constant Settings
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Landscape", meta = (ToolTip = "The number that controls all randomness"))
 	int Seed = 1337;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "How much distance to go until checking the noise again."))
@@ -112,29 +112,32 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Chunk spacing/Distance to go until make chunk follow"))
 	double ChunkDistance = 1000.00f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "How far the chunk should go"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Landscape", meta = (ToolTip = "How far the chunk should go"))
 	double RenderDistance = 100.00f;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Height Scale of the Landscape"))
 	double HeightScale = 10.00f;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "The amount to multiply the value of plate tectonics by."))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "The amount to multiply the value of plate tectonics by."))
 	double PlateTectonicsHeightScale = 50;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "How big the value of the cellular noise has to be inorder to count as a plate edge.", ClampMin = 0, ClampMax = 1))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "How big the value of the cellular noise has to be inorder to count as a plate edge.", ClampMin = 0, ClampMax = 1))
 	double PlateBoarderThreshhold = 0.0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Max attempts to check for the master vertex. If less than 1, it just keeps going."))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Max attempts to check for the master vertex. If less than 1, it just keeps going."))
 	int MasterVertexCheckAttempts = 1000;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Min value for plate displacement."))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Min value for plate displacement."))
 	double MinPlateSpeed = 500;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Max value for plate displacement."))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Max value for plate displacement."))
 	double MaxPlateSpeed = 1000;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Max value for plate displacement."))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Max value for plate displacement."))
 	int MaxMasterVertexCacheSize = 10000;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Landscape", meta = (ToolTip = "Max value for plate displacement."))
+	int MaxCheckBothPlateLocationsAttempts = 100;
 	//===============================================================================================================
 
 	//===============================================================================================================
