@@ -17,10 +17,6 @@
 	],
 	"Plugins": [
 		{
-			"Name": "ModelingToolsEditorMode",
-			"Enabled": false
-		},
-		{
 			"Name": "StateTree",
 			"Enabled": true
 		},
@@ -123,38 +119,6 @@
 		{
 			"Name": "MetaHumanCharacter",
 			"Enabled": true
-		},
-		{
-			"Name": "OnlineFramework",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesEOS",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesEOSGS",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesEpicCommon",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesNull",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesOSSAdapter",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineSubsystemEOS",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineSubsystemSteam",
-			"Enabled": false
 		},
 		{
 			"Name": "AbilitySystemGameFeatureActions",

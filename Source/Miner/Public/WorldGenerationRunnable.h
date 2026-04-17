@@ -5,23 +5,7 @@
 #include "CoreMinimal.h"
 #include "HAL/Runnable.h"
 #include "UDynamicMesh.h"
-
-UENUM(BlueprintType)
-enum class EPlateDirection : uint8
-{
-	North,
-	East,
-	South,
-	West
-};
-
-UENUM(BlueprintType)
-enum class ECollisionType : uint8 
-{
-	None, 
-	Push,
-	Pull
-};
+#include "LandscapeGenerationHelpers.h"
 
 class FSingleThreadRunnable;
 class AWorldLandscape;
@@ -63,22 +47,23 @@ protected:
 	* This is nessesary so that a world generates the same everytime.
 	*/
 	FVector2D FindMasterVertexOfPlate(FVector2D BoarderLocation);
-	/**
-	*
-	*/
-	ECollisionType ArePlatesColliding(EPlateDirection Plate1Direction, EPlateDirection Plate2Direction);
+	ECollisionType ArePlatesColliding(FVector2D MasterVertexLocation1, FVector2D MasterVertexLocation2);
+	FPlateVertexLocations FindBothPlateVertexLocations(FVector2D Vertex);
+	bool IsNextToBlack(FVector2D VertexLocation);
 
 	FRunnableThread* Thread;
 	bool bRunThread = true;
 
-	TObjectPtr<AWorldLandscape> OwnerLandscape;
-	UWorld* CurrentWorld;
+	TObjectPtr<AWorldLandscape> OwnerLandscape = nullptr;
+	UWorld* CurrentWorld = nullptr;
 
 	TArray<int32> Verticies;
 	/* Sort of like a height map, but not a map. Maybe make it a map? */
 	TArray<double> VertexHeights;
 
 	double LastRenderDistance = -1;
-	FVector3d LocalClientPawnLocation;
-	int64 NumPointsPerLine;
+	FVector LocalClientPawnLocation = FVector::ZeroVector;
+	int64 NumPointsPerLine = -1;
+
+	TMap<FVector2D, FVector2D> MasterVertexCache;
 };
