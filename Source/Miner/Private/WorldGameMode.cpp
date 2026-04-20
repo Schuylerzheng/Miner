@@ -8,46 +8,23 @@
 
 AWorldGameMode::AWorldGameMode()
 {
-
+	ServerWorldLandscape = AWorldLandscape::StaticClass();
 }
 
 void AWorldGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Get the world landscape immediately, making the landscape giive us the their reference is too slow and inconsistent
-	for (TActorIterator<AWorldLandscape> It(GetWorld()); It; ++It)
-	{
-		AWorldLandscape* GivenLandscape = *It;
+	check(GetWorld());
 
-		if (!IsValid(Landscape)) {
-			// There is no landscape right now, so there is just 1 for now
-			Landscape = GivenLandscape;
-			check(IsValid(Landscape));
-		}
-		else {
-			// I didn't implement multiple landscapes, so just crash
-			unimplemented();
-		}
-	}
+	GetWorld()->SpawnActor(ServerWorldLandscape);
 
 	LandscapeGeneratedDelegate.AddUObject(this, &AWorldGameMode::SetPlayerSpawns);
 }
 
 void AWorldGameMode::SetPlayerSpawns()
 {
-	// Tmp: Just set all players to spawn in the same location
-	for (TActorIterator<APlayerCharacter> It(GetWorld()); It; ++It)
-	{
-		APlayerCharacter* Player = *It;
-		
-		check(IsValid(Player));
-
-		FVector LineTraceHitLocation = FindPlayerSpawnLocation();
-
-		GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Black, FString::Printf(TEXT("THing is: %s"), *FVector(LineTraceHitLocation.X, LineTraceHitLocation.Y, LineTraceHitLocation.Z + Player->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()).ToString()));
-		Player->SetActorLocation(FVector(LineTraceHitLocation.X, LineTraceHitLocation.Y, (LineTraceHitLocation.Z + Player->GetCapsuleComponent()->GetScaledCapsuleHalfHeight())), false, nullptr, ETeleportType::TeleportPhysics);
-	}
+	unimplemented();
 }
 
 FVector AWorldGameMode::FindPlayerSpawnLocation() const

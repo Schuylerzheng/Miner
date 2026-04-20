@@ -12,6 +12,11 @@ DECLARE_LOG_CATEGORY_EXTERN(LogLandscape, Log, All);
 
 DECLARE_MULTICAST_DELEGATE(FTerrainDataGeneratedSignature);
 
+enum class MachineType : bool {
+	Server,
+	Client
+};
+
 /**
  * AWorldLandscape is an Actor that generates a dynamic landscape mesh based on a seed
  */
@@ -190,4 +195,6 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite)
 	FVector LastPlayerLocation = FVector::ZeroVector;
+
+	MachineType CurrentMachineType;
 };

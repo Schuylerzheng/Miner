@@ -33,7 +33,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Spawning|Player")
 	TEnumAsByte<ECollisionChannel> LandscapeChannel = ECC_WorldStatic;
 
-	TObjectPtr<AWorldLandscape> Landscape = nullptr;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Classes")
+	TSubclassOf<AWorldLandscape> ServerWorldLandscape;
 
 	FTerrainDataGeneratedSignature LandscapeGeneratedDelegate;
 };

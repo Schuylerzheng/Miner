@@ -17,6 +17,7 @@ AWorldLandscape::AWorldLandscape()
 	bReplicates = false;
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+	CurrentMachineType = HasAuthority() ? MachineType::Server : MachineType::Client;
 
 	DynamicMeshComponent = CreateDefaultSubobject<UDynamicMeshComponent>(TEXT("DynamicMeshComponent"));
 	DynamicMeshComponent->SetMobility(EComponentMobility::Movable);
@@ -37,10 +38,17 @@ void AWorldLandscape::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (CurrentMachineType == MachineType::Server) {
+		// TMP
+		return;
+	}
+
 	checkf(ChunkDistance != 0, TEXT("Chunk distance cannot be 0"));
 
 	// Get local client pawn
-	checkf(IsValid(LocalClientPawn = GetWorld()->GetFirstPlayerController()->GetPawn()), TEXT("Local Pawn was bad"));
+	check(IsValid(GetWorld()));
+	check(IsValid(LocalClientPawn = GetWorld()->GetFirstPlayerController()->GetPawn()));
+
 	LastPlayerLocation = LocalClientPawn->GetActorLocation();
 
 	DynamicMesh = AllocateComputeMesh();
@@ -71,6 +79,11 @@ void AWorldLandscape::BeginPlay()
 void AWorldLandscape::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (CurrentMachineType == MachineType::Server) {
+		// TMP
+		return;
+	}
 	
 	checkf(IsValid(LocalClientPawn), TEXT("Client Pawn bad"));
 	FVector LocalClientPawnLocation = LocalClientPawn->GetActorLocation();
@@ -89,6 +102,11 @@ void AWorldLandscape::Tick(float DeltaTime)
 void AWorldLandscape::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
+
+	if (CurrentMachineType == MachineType::Server) {
+		// TMP
+		return;
+	}
 
 	FreeAllComputeMeshes();
 	CleanUp();
