@@ -1,14 +1,10 @@
-# Miner - a game inspired by Minecraft
-I'm going to try to have: 
-* very good graphics (thanks ue, sort of)
-* cool world gen
-* realistic mechanics (we removed fireflies being eaten by frogs because they are poisonous)
-* Smart AI
-* maybe have good performance
+# Miner
+An Unreal Engine game
 
-## Helpful git commands
-* Save ssh key
-   <pre>eval "$(ssh-agent -s)"</pre>
-   <pre>ssh-add [SSH SIGNING KEY]</pre>
-* Reset to last commit
-   <pre>git reset --hard HEAD</pre>
+## Goals for the Project 
+* Have realistic movement
+* Mostly realistic mechanics
+* Fun game :) 
+
+## How to contribute 
+Go read contributing.md, and then make an issue with what you want changed. If you can, you should also make a pull request with a fix.
