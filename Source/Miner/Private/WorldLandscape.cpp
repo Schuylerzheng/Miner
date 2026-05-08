@@ -14,7 +14,7 @@ DEFINE_LOG_CATEGORY(LogLandscape);
 
 AWorldLandscape::AWorldLandscape()
 {
-	bReplicates = false;
+	bReplicates = true;
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	CurrentMachineType = HasAuthority() ? MachineType::Server : MachineType::Client;
@@ -38,18 +38,7 @@ void AWorldLandscape::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (CurrentMachineType == MachineType::Server) {
-		// TMP
-		return;
-	}
-
 	checkf(ChunkDistance != 0, TEXT("Chunk distance cannot be 0"));
-
-	// Get local client pawn
-	check(IsValid(GetWorld()));
-	check(IsValid(LocalClientPawn = GetWorld()->GetFirstPlayerController()->GetPawn()));
-
-	LastPlayerLocation = LocalClientPawn->GetActorLocation();
 
 	DynamicMesh = AllocateComputeMesh();
 	DynamicMeshComponent->SetDynamicMesh(DynamicMesh);
@@ -64,15 +53,19 @@ void AWorldLandscape::BeginPlay()
 	if (ReserveCount > TNumericLimits<int32>::Max()) ReserveCount = TNumericLimits<int32>::Max();
 	GeneratedVertexLocations.Reserve((int32)ReserveCount);
 
-	// Get the seed from the gamemode 
-	// Note: not in use now, that will be changed later. Seed is controlled by a local uproperty right now
-	/*if (IsValid(UGameplayStatics::GetGameMode(GetWorld()))) Seed = CastChecked<AWorldGameMode>(UGameplayStatics::GetGameMode(GetWorld()))->Seed;
-	else Seed = 1337; */
-
 	SetupNoise();
 
+	if (CurrentMachineType == MachineType::Server) { LastPlayerLocation = FVector::ZeroVector; }    // TMP, Server just needs to find the spawn chunks for now.
+	else {
+		check(IsValid(GetWorld())); 
+		check(IsValid(LocalClientPawn = GetWorld()->GetFirstPlayerController()->GetPawn()));
+		checkf(LocalClientPawn->IsLocallyControlled(), TEXT("LocalClientPawn is not locally controlled"));
+
+		LastPlayerLocation = LocalClientPawn->GetActorLocation();
+	}
+
 	// Generate the mesh (last step)
-	WorldGenerationRunnable->bGenerate = true;
+	WorldGenerationRunnable->bGenerate = true; 
 	while (WorldGenerationRunnable->bGenerate) { FPlatformProcess::Sleep(0.1f); } // Wait for it to finish
 }
 
@@ -162,6 +155,12 @@ void AWorldLandscape::CleanUp()
 {
 	CleanUpPointer(BasicLandNoise);
 	CleanUpPointer(PlateTectonicsNoise);
+
+	if (WorldGenerationRunnable)
+	{
+		WorldGenerationRunnable->Stop();
+		WorldGenerationRunnable = nullptr;
+	}
 }
 
 UDynamicMeshPool* AWorldLandscape::GetComputeMeshPool()

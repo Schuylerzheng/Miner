@@ -130,11 +130,11 @@
 		},
 		{
 			"Name": "OnlineServicesEOS",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "OnlineServicesEOSGS",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "OnlineServicesEpicCommon",
@@ -150,7 +150,7 @@
 		},
 		{
 			"Name": "OnlineSubsystemEOS",
-			"Enabled": false
+			"Enabled": true
 		},
 		{
 			"Name": "OnlineSubsystemSteam",
@@ -234,6 +234,14 @@
 		},
 		{
 			"Name": "CodeEditor",
+			"Enabled": true
+		},
+		{
+			"Name": "EOSVoiceChat",
+			"Enabled": true
+		},
+		{
+			"Name": "SocketSubsystemEOS",
 			"Enabled": true
 		}
 	],

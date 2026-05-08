@@ -74,7 +74,7 @@ void FWorldGenerationRunnable::GenerateDynamicMesh()
 	VertexHeights.Empty();
 
 	// Local Client Pawn Location always changes
-	LocalClientPawnLocation = (CurrentWorld->IsGameWorld()) ? OwnerLandscape->LocalClientPawn->GetActorLocation() : FVector3d::ZeroVector;
+	if (IsValid(OwnerLandscape->LocalClientPawn)) { LocalClientPawnLocation = (CurrentWorld->IsGameWorld()) ? OwnerLandscape->LocalClientPawn->GetActorLocation() : FVector3d::ZeroVector; }
 
 	// These things only change if render distance changes
 	if (OwnerLandscape->RenderDistance != LastRenderDistance) {
@@ -113,7 +113,7 @@ void FWorldGenerationRunnable::GenerateBasicHeights()
 		float Height = OwnerLandscape->BasicLandNoise->GetNoise(LocalVertexLocation.X + LocalClientPawnLocation.X / 50, LocalVertexLocation.Y + LocalClientPawnLocation.Y / 50) * OwnerLandscape->HeightScale;
 
 		return Height;
-		});
+	});
 }
 
 void FWorldGenerationRunnable::ApplyPlateTectonics()

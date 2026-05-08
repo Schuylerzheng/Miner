@@ -5,10 +5,11 @@
 #include "WorldLandscape.h"
 #include "Components/CapsuleComponent.h"
 #include "EngineUtils.h"
+#include "GameFramework/PlayerStart.h"
 
 AWorldGameMode::AWorldGameMode()
 {
-	ServerWorldLandscape = AWorldLandscape::StaticClass();
+
 }
 
 void AWorldGameMode::BeginPlay()
@@ -17,14 +18,31 @@ void AWorldGameMode::BeginPlay()
 
 	check(GetWorld());
 
-	GetWorld()->SpawnActor(ServerWorldLandscape);
+	for (TActorIterator<AWorldLandscape> It(GetWorld()); It; ++It)
+	{
+		AWorldLandscape* Landscape = *It;
 
-	LandscapeGeneratedDelegate.AddUObject(this, &AWorldGameMode::SetPlayerSpawns);
+		check(IsValid(Landscape));
+		if (IsValid(Landscape))
+		{
+			Landscape->ApplyTerrainDataDelegate.AddUObject(this, &AWorldGameMode::SpawnPlayerStarts);
+		}
+	}
 }
 
-void AWorldGameMode::SetPlayerSpawns()
+AActor* AWorldGameMode::ChoosePlayerStart_Implementation(AController* Player)
 {
-	unimplemented();
+	check(IsValid(PlayerStart));
+
+	return PlayerStart;
+}
+
+void AWorldGameMode::SpawnPlayerStarts()
+{
+	PlayerStart = GetWorld()->SpawnActor<APlayerStart>(APlayerStart::StaticClass(), FindPlayerSpawnLocation(), FRotator::ZeroRotator);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Player spawn location: %s"), *PlayerStart->GetActorLocation().ToString()));
+
 }
 
 FVector AWorldGameMode::FindPlayerSpawnLocation() const

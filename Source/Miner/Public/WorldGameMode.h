@@ -22,8 +22,9 @@ public:
 
 protected:
 	virtual void BeginPlay();
+	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
-	void SetPlayerSpawns();
+	void SpawnPlayerStarts();
 	/** For now just find an acceptable height at 0, 0, 0 */
 	FVector FindPlayerSpawnLocation() const;
 
@@ -33,8 +34,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Spawning|Player")
 	TEnumAsByte<ECollisionChannel> LandscapeChannel = ECC_WorldStatic;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Classes")
-	TSubclassOf<AWorldLandscape> ServerWorldLandscape;
+	TObjectPtr<AWorldLandscape> WorldLandscape = nullptr;
 
-	FTerrainDataGeneratedSignature LandscapeGeneratedDelegate;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<APlayerStart> PlayerStart = nullptr;
 };
