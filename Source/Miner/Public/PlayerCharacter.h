@@ -16,7 +16,7 @@ class MINER_API APlayerCharacter : public ABaseCharacter
 
 public:
 	APlayerCharacter();
-	
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;

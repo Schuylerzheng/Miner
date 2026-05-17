@@ -25,6 +25,7 @@ protected:
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
 	void SpawnPlayerStarts();
+	void GetWorldLandscapes();
 	/** For now just find an acceptable height at 0, 0, 0 */
 	FVector FindPlayerSpawnLocation() const;
 
