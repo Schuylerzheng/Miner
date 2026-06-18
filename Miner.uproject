@@ -1,237 +1,235 @@
 {
-	"FileVersion": 3,
-	"EngineAssociation": "5.7",
-	"Category": "",
-	"Description": "",
-	"Modules": [
-		{
-			"Name": "Miner",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "ThirdParty",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		}
-	],
-	"Plugins": [
-		{
-			"Name": "ModelingToolsEditorMode",
-			"Enabled": false
-		},
-		{
-			"Name": "StateTree",
-			"Enabled": true
-		},
-		{
-			"Name": "GameplayStateTree",
-			"Enabled": true
-		},
-		{
-			"Name": "GeneSplicer",
-			"Enabled": true
-		},
-		{
-			"Name": "AlembicHairImporter",
-			"Enabled": false
-		},
-		{
-			"Name": "ApexDestruction",
-			"Enabled": true
-		},
-		{
-			"Name": "CelestialVault",
-			"Enabled": true
-		},
-		{
-			"Name": "PCGBiomeCore",
-			"Enabled": true
-		},
-		{
-			"Name": "PCGBiomeSample",
-			"Enabled": true
-		},
-		{
-			"Name": "PCG",
-			"Enabled": true
-		},
-		{
-			"Name": "PCGExternalDataInterop",
-			"Enabled": true
-		},
-		{
-			"Name": "PCGGeometryScriptInterop",
-			"Enabled": false
-		},
-		{
-			"Name": "PCGInstancedActorsInterop",
-			"Enabled": true
-		},
-		{
-			"Name": "PCGNiagaraInterop",
-			"Enabled": true
-		},
-		{
-			"Name": "PCGWaterInterop",
-			"Enabled": true
-		},
-		{
-			"Name": "Buoyancy",
-			"Enabled": true
-		},
-		{
-			"Name": "Water",
-			"Enabled": true
-		},
-		{
-			"Name": "WaterExtras",
-			"Enabled": true
-		},
-		{
-			"Name": "WaterAdvanced",
-			"Enabled": true
-		},
-		{
-			"Name": "MetaHuman",
-			"Enabled": true,
-			"SupportedTargetPlatforms": [
-				"Win64",
-				"Linux"
-			]
-		},
-		{
-			"Name": "MetaHumanCalibrationProcessing",
-			"Enabled": true,
-			"SupportedTargetPlatforms": [
-				"Win64",
-				"Linux"
-			]
-		},
-		{
-			"Name": "MetaHumanCoreTech",
-			"Enabled": true,
-			"SupportedTargetPlatforms": [
-				"Win64",
-				"Linux"
-			]
-		},
-		{
-			"Name": "MetaHumanLiveLink",
-			"Enabled": true
-		},
-		{
-			"Name": "MetaHumanCharacter",
-			"Enabled": true
-		},
-		{
-			"Name": "OnlineFramework",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesEOS",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesEOSGS",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesEpicCommon",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesNull",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineServicesOSSAdapter",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineSubsystemEOS",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineSubsystemSteam",
-			"Enabled": false
-		},
-		{
-			"Name": "AbilitySystemGameFeatureActions",
-			"Enabled": true
-		},
-		{
-			"Name": "AESGCMHandlerComponent",
-			"Enabled": false
-		},
-		{
-			"Name": "MutableClothing",
-			"Enabled": true
-		},
-		{
-			"Name": "VoiceChat",
-			"Enabled": false
-		},
-		{
-			"Name": "WebAuth",
-			"Enabled": false
-		},
-		{
-			"Name": "FastGeoStreaming",
-			"Enabled": true
-		},
-		{
-			"Name": "CodeView",
-			"Enabled": true
-		},
-		{
-			"Name": "GeometryScripting",
-			"Enabled": true
-		},
-		{
-			"Name": "GeometryProcessing",
-			"Enabled": true
-		},
-		{
-			"Name": "DaySequence",
-			"Enabled": true
-		},
-		{
-			"Name": "HairStrandsMutable",
-			"Enabled": true
-		},
-		{
-			"Name": "MutablePopulation",
-			"Enabled": true
-		},
-		{
-			"Name": "RigLogicMutable",
-			"Enabled": true
-		},
-		{
-			"Name": "GameplayAbilities",
-			"Enabled": true
-		},
-		{
-			"Name": "Iris",
-			"Enabled": true
-		},
-		{
-			"Name": "MeshModelingToolset",
-			"Enabled": true
-		},
-		{
-			"Name": "VisualStudioTools",
-			"Enabled": true,
-			"SupportedTargetPlatforms": [
-				"Win64"
-			],
-			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/362651520df94e4fa65492dbcba44ae2"
-		}
-	],
-	"TargetPlatforms": [
-		"Linux",
-		"Mac",
-		"Windows"
-	]
+  "FileVersion": 3,
+  "EngineAssociation": "5.8",
+  "Category": "",
+  "Description": "",
+  "Modules": [
+    {
+      "Name": "Miner",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    },
+    {
+      "Name": "ThirdParty",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "ModelingToolsEditorMode",
+      "Enabled": false
+    },
+    {
+      "Name": "StateTree",
+      "Enabled": true
+    },
+    {
+      "Name": "GameplayStateTree",
+      "Enabled": true
+    },
+    {
+      "Name": "GeneSplicer",
+      "Enabled": true
+    },
+    {
+      "Name": "AlembicHairImporter",
+      "Enabled": false
+    },
+    {
+      "Name": "ApexDestruction",
+      "Enabled": true
+    },
+    {
+      "Name": "CelestialVault",
+      "Enabled": true
+    },
+    {
+      "Name": "PCGBiomeCore",
+      "Enabled": true
+    },
+    {
+      "Name": "PCGBiomeSample",
+      "Enabled": true
+    },
+    {
+      "Name": "PCG",
+      "Enabled": true
+    },
+    {
+      "Name": "PCGExternalDataInterop",
+      "Enabled": true
+    },
+    {
+      "Name": "PCGGeometryScriptInterop",
+      "Enabled": false
+    },
+    {
+      "Name": "PCGInstancedActorsInterop",
+      "Enabled": true
+    },
+    {
+      "Name": "PCGNiagaraInterop",
+      "Enabled": true
+    },
+    {
+      "Name": "PCGWaterInterop",
+      "Enabled": true
+    },
+    {
+      "Name": "Buoyancy",
+      "Enabled": true
+    },
+    {
+      "Name": "Water",
+      "Enabled": true
+    },
+    {
+      "Name": "WaterExtras",
+      "Enabled": true
+    },
+    {
+      "Name": "WaterAdvanced",
+      "Enabled": true
+    },
+    {
+      "Name": "MetaHuman",
+      "Enabled": true,
+      "SupportedTargetPlatforms": [
+        "Win64",
+        "Linux"
+      ]
+    },
+    {
+      "Name": "MetaHumanCalibrationProcessing",
+      "Enabled": true,
+      "SupportedTargetPlatforms": [
+        "Win64",
+        "Linux"
+      ]
+    },
+    {
+      "Name": "MetaHumanCoreTech",
+      "Enabled": true,
+      "SupportedTargetPlatforms": [
+        "Win64",
+        "Linux"
+      ]
+    },
+    {
+      "Name": "MetaHumanLiveLink",
+      "Enabled": true
+    },
+    {
+      "Name": "MetaHumanCharacter",
+      "Enabled": true
+    },
+    {
+      "Name": "OnlineFramework",
+      "Enabled": false
+    },
+    {
+      "Name": "OnlineServicesEOS",
+      "Enabled": false
+    },
+    {
+      "Name": "OnlineServicesEOSGS",
+      "Enabled": false
+    },
+    {
+      "Name": "OnlineServicesEpicCommon",
+      "Enabled": false
+    },
+    {
+      "Name": "OnlineServicesNull",
+      "Enabled": false
+    },
+    {
+      "Name": "OnlineServicesOSSAdapter",
+      "Enabled": false
+    },
+    {
+      "Name": "OnlineSubsystemEOS",
+      "Enabled": false
+    },
+    {
+      "Name": "OnlineSubsystemSteam",
+      "Enabled": false
+    },
+    {
+      "Name": "AbilitySystemGameFeatureActions",
+      "Enabled": true
+    },
+    {
+      "Name": "AESGCMHandlerComponent",
+      "Enabled": false
+    },
+    {
+      "Name": "MutableClothing",
+      "Enabled": true
+    },
+    {
+      "Name": "VoiceChat",
+      "Enabled": false
+    },
+    {
+      "Name": "WebAuth",
+      "Enabled": false
+    },
+    {
+      "Name": "FastGeoStreaming",
+      "Enabled": true
+    },
+    {
+      "Name": "CodeView",
+      "Enabled": true
+    },
+    {
+      "Name": "GeometryScripting",
+      "Enabled": true
+    },
+    {
+      "Name": "GeometryProcessing",
+      "Enabled": true
+    },
+    {
+      "Name": "DaySequence",
+      "Enabled": true
+    },
+    {
+      "Name": "HairStrandsMutable",
+      "Enabled": true
+    },
+    {
+      "Name": "MutablePopulation",
+      "Enabled": true
+    },
+    {
+      "Name": "GameplayAbilities",
+      "Enabled": true
+    },
+    {
+      "Name": "Iris",
+      "Enabled": true
+    },
+    {
+      "Name": "MeshModelingToolset",
+      "Enabled": true
+    },
+    {
+      "Name": "VisualStudioTools",
+      "Enabled": false,
+      "SupportedTargetPlatforms": [
+        "Win64"
+      ]
+    }
+  ],
+  "TargetPlatforms": [
+    "Linux",
+    "Mac",
+    "Windows"
+  ],
+  "AdditionalRootDirectories": [],
+  "AdditionalPluginDirectories": [],
+  "EpicSampleNameHash": ""
 }

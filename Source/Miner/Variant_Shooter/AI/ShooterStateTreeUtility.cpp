@@ -80,30 +80,22 @@ FText FStateTreeLineOfSightToTargetCondition::GetDescription(const FGuid& ID, FS
 
 EStateTreeRunStatus FStateTreeFaceActorTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
-	// have we transitioned from another state?
-	if (Transition.ChangeType == EStateTreeStateChangeType::Changed)
-	{
-		// get the instance data
-		FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	// get the instance data
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-		// set the AI Controller's focus
-		InstanceData.Controller->SetFocus(InstanceData.ActorToFaceTowards);
-	}
+	// set the AI Controller's focus
+	InstanceData.Controller->SetFocus(InstanceData.ActorToFaceTowards);
 
 	return EStateTreeRunStatus::Running;
 }
 
 void FStateTreeFaceActorTask::ExitState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
-	// have we transitioned to another state?
-	if (Transition.ChangeType == EStateTreeStateChangeType::Changed)
-	{
-		// get the instance data
-		FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	// get the instance data
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-		// clear the AI Controller's focus
-		InstanceData.Controller->ClearFocus(EAIFocusPriority::Gameplay);
-	}
+	// clear the AI Controller's focus
+	InstanceData.Controller->ClearFocus(EAIFocusPriority::Gameplay);
 }
 
 #if WITH_EDITOR
@@ -117,30 +109,22 @@ FText FStateTreeFaceActorTask::GetDescription(const FGuid& ID, FStateTreeDataVie
 
 EStateTreeRunStatus FStateTreeFaceLocationTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
-	// have we transitioned from another state?
-	if (Transition.ChangeType == EStateTreeStateChangeType::Changed)
-	{
-		// get the instance data
-		FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	// get the instance data
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-		// set the AI Controller's focus
-		InstanceData.Controller->SetFocalPoint(InstanceData.FaceLocation);
-	}
+	// set the AI Controller's focus
+	InstanceData.Controller->SetFocalPoint(InstanceData.FaceLocation);
 
 	return EStateTreeRunStatus::Running;
 }
 
 void FStateTreeFaceLocationTask::ExitState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
-	// have we transitioned to another state?
-	if (Transition.ChangeType == EStateTreeStateChangeType::Changed)
-	{
-		// get the instance data
-		FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	// get the instance data
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-		// clear the AI Controller's focus
-		InstanceData.Controller->ClearFocus(EAIFocusPriority::Gameplay);
-	}
+	// clear the AI Controller's focus
+	InstanceData.Controller->ClearFocus(EAIFocusPriority::Gameplay);
 }
 
 #if WITH_EDITOR
@@ -154,15 +138,11 @@ FText FStateTreeFaceLocationTask::GetDescription(const FGuid& ID, FStateTreeData
 
 EStateTreeRunStatus FStateTreeSetRandomFloatTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
-	// have we transitioned to another state?
-	if (Transition.ChangeType == EStateTreeStateChangeType::Changed)
-	{
-		// get the instance data
-		FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	// get the instance data
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-		// calculate the output value
-		InstanceData.OutValue = FMath::RandRange(InstanceData.MinValue, InstanceData.MaxValue);
-	}
+	// calculate the output value
+	InstanceData.OutValue = FMath::RandRange(InstanceData.MinValue, InstanceData.MaxValue);
 
 	return EStateTreeRunStatus::Running;
 }
@@ -178,30 +158,22 @@ FText FStateTreeSetRandomFloatTask::GetDescription(const FGuid& ID, FStateTreeDa
 
 EStateTreeRunStatus FStateTreeShootAtTargetTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
-	// have we transitioned from another state?
-	if (Transition.ChangeType == EStateTreeStateChangeType::Changed)
-	{
-		// get the instance data
-		FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	// get the instance data
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-		// tell the character to shoot the target
-		InstanceData.Character->StartShooting(InstanceData.Target);
-	}
+	// tell the character to shoot the target
+	InstanceData.Character->StartShooting(InstanceData.Target);
 
 	return EStateTreeRunStatus::Running;
 }
 
 void FStateTreeShootAtTargetTask::ExitState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
-	// have we transitioned to another state?
-	if (Transition.ChangeType == EStateTreeStateChangeType::Changed)
-	{
-		// get the instance data
-		FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	// get the instance data
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-		// tell the character to stop shooting
-		InstanceData.Character->StopShooting();
-	}
+	// tell the character to stop shooting
+	InstanceData.Character->StopShooting();
 }
 
 #if WITH_EDITOR
@@ -213,145 +185,155 @@ FText FStateTreeShootAtTargetTask::GetDescription(const FGuid& ID, FStateTreeDat
 
 EStateTreeRunStatus FStateTreeSenseEnemiesTask::EnterState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
-	// have we transitioned from another state?
-	if (Transition.ChangeType == EStateTreeStateChangeType::Changed)
-	{
-		// get the instance data
-		FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	// get the instance data
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-		// bind the perception updated delegate on the controller
-		InstanceData.Controller->OnShooterPerceptionUpdated.BindLambda(
-			[WeakContext = Context.MakeWeakExecutionContext()](AActor* SensedActor, const FAIStimulus& Stimulus)
+	// bind the perception updated delegate on the controller
+	InstanceData.Controller->OnShooterPerceptionUpdated.BindLambda(
+		[WeakContext = Context.MakeWeakExecutionContext()](AActor* SensedActor, const FAIStimulus& Stimulus)
+		{
+			// get the instance data inside the lambda
+			const FStateTreeStrongExecutionContext StrongContext = WeakContext.MakeStrongExecutionContext();
+			if (FInstanceDataType* LambdaInstanceData = StrongContext.GetInstanceDataPtr<FInstanceDataType>())
 			{
-				// get the instance data inside the lambda
-				const FStateTreeStrongExecutionContext StrongContext = WeakContext.MakeStrongExecutionContext();
-				if (FInstanceDataType* LambdaInstanceData = StrongContext.GetInstanceDataPtr<FInstanceDataType>())
+				// have we sensed the enemy directly?
+				if (SensedActor->ActorHasTag(LambdaInstanceData->SenseTag))
 				{
-					if (SensedActor->ActorHasTag(LambdaInstanceData->SenseTag))
+					// set the controller's target
+					LambdaInstanceData->Controller->SetCurrentTarget(SensedActor);
+
+					// set the task output
+					LambdaInstanceData->TargetActor = SensedActor;
+
+					// broadcast the see enemy delegate
+					StrongContext.BroadcastDelegate(LambdaInstanceData->OnSeeEnemyDelegate);
+				}
+				// have we sensed something owned by the enemy? firing noise, bullet impacts, etc.
+				else if (Stimulus.Tag == LambdaInstanceData->SenseTag)
+				{
+					bool bDirectLOS = false;
+
+					// calculate the direction of the stimulus
+					const FVector StimulusDir = (Stimulus.StimulusLocation - LambdaInstanceData->Character->GetActorLocation()).GetSafeNormal();
+
+					// infer the angle from the dot product between the character facing and the stimulus direction
+					const float DirDot = FVector::DotProduct(StimulusDir, LambdaInstanceData->Character->GetActorForwardVector());
+					const float MaxDot = FMath::Cos(FMath::DegreesToRadians(LambdaInstanceData->DirectLineOfSightCone));
+
+					// is the direction within our perception cone?
+					if (DirDot >= MaxDot)
 					{
-						bool bDirectLOS = false;
+						// run a line trace between the character and the sensed actor
+						FCollisionQueryParams QueryParams;
+						QueryParams.AddIgnoredActor(LambdaInstanceData->Character);
+						QueryParams.AddIgnoredActor(SensedActor);
 
-						// calculate the direction of the stimulus
-						const FVector StimulusDir = (Stimulus.StimulusLocation - LambdaInstanceData->Character->GetActorLocation()).GetSafeNormal();
+						FHitResult OutHit;
 
-						// infer the angle from the dot product between the character facing and the stimulus direction
-						const float DirDot = FVector::DotProduct(StimulusDir, LambdaInstanceData->Character->GetActorForwardVector());
-						const float MaxDot = FMath::Cos(FMath::DegreesToRadians(LambdaInstanceData->DirectLineOfSightCone));
+						// we have direct line of sight if this trace is unobstructed
+						bDirectLOS = !LambdaInstanceData->Character->GetWorld()->LineTraceSingleByChannel(OutHit, LambdaInstanceData->Character->GetActorLocation(), SensedActor->GetActorLocation(), ECC_Visibility, QueryParams);
 
-						// is the direction within our perception cone?
-						if (DirDot >= MaxDot)
+					}
+
+					// check if we have a direct line of sight to the stimulus
+					if (bDirectLOS)
+					{
+						// set the controller's target
+						LambdaInstanceData->Controller->SetCurrentTarget(SensedActor);
+
+						// set the task output
+						LambdaInstanceData->TargetActor = SensedActor;
+
+						// broadcast the see enemy delegate
+						StrongContext.BroadcastDelegate(LambdaInstanceData->OnSeeEnemyDelegate);
+
+						// no direct line of sight to target
+					}
+					else {
+
+						// if we already have a target, ignore the partial sense and keep on them
+						if (!IsValid(LambdaInstanceData->TargetActor))
 						{
-							// run a line trace between the character and the sensed actor
-							FCollisionQueryParams QueryParams;
-							QueryParams.AddIgnoredActor(LambdaInstanceData->Character);
-							QueryParams.AddIgnoredActor(SensedActor);
+							// scale the last stimulus by time elapsed so we phase it out over time
+							const float LastStimulusTime = LambdaInstanceData->Character->GetWorld()->GetTimeSeconds() - LambdaInstanceData->LastStimulusTime;
+							const float ScaledStimulus = LambdaInstanceData->LastStimulusStrength / FMath::Max(LastStimulusTime, 1.0f);
 
-							FHitResult OutHit;
-
-							// we have direct line of sight if this trace is unobstructed
-							bDirectLOS = !LambdaInstanceData->Character->GetWorld()->LineTraceSingleByChannel(OutHit, LambdaInstanceData->Character->GetActorLocation(), SensedActor->GetActorLocation(), ECC_Visibility, QueryParams);
-
-						}
-
-						// check if we have a direct line of sight to the stimulus
-						if (bDirectLOS)
-						{
-							// set the controller's target
-							LambdaInstanceData->Controller->SetCurrentTarget(SensedActor);
-
-							// set the task output
-							LambdaInstanceData->TargetActor = SensedActor;
-
-							// set the flags
-							LambdaInstanceData->bHasTarget = true;
-							LambdaInstanceData->bHasInvestigateLocation = false;
-
-							// no direct line of sight to target
-						}
-						else {
-
-							// if we already have a target, ignore the partial sense and keep on them
-							if (!IsValid(LambdaInstanceData->TargetActor))
+							// is this stimulus stronger?
+							if (Stimulus.Strength > ScaledStimulus)
 							{
-								// is this stimulus stronger than the last one we had?
-								if (Stimulus.Strength > LambdaInstanceData->LastStimulusStrength)
-								{
-									// update the stimulus strength
-									LambdaInstanceData->LastStimulusStrength = Stimulus.Strength;
+								// update the stimulus strength
+								LambdaInstanceData->LastStimulusStrength = Stimulus.Strength;
 
-									// set the investigate location
-									LambdaInstanceData->InvestigateLocation = Stimulus.StimulusLocation;
+								// update the stimulus time
+								LambdaInstanceData->LastStimulusTime = LambdaInstanceData->Character->GetWorld()->GetTimeSeconds();
 
-									// set the investigate flag
-									LambdaInstanceData->bHasInvestigateLocation = true;
-								}
+								// set the investigate location
+								LambdaInstanceData->InvestigateLocation = Stimulus.StimulusLocation;
+
+								// broadcast the investigate delegate
+								StrongContext.BroadcastDelegate(LambdaInstanceData->OnInvestigateLocationDelegate);
 							}
 						}
 					}
 				}
 			}
-		);
+		}
+	);
 
-		// bind the perception forgotten delegate on the controller
-		InstanceData.Controller->OnShooterPerceptionForgotten.BindLambda(
-			[WeakContext = Context.MakeWeakExecutionContext()](AActor* SensedActor)
+	// bind the perception forgotten delegate on the controller
+	InstanceData.Controller->OnShooterPerceptionForgotten.BindLambda(
+		[WeakContext = Context.MakeWeakExecutionContext()](AActor* SensedActor)
+		{
+			// get the instance data inside the lambda
+			const FStateTreeStrongExecutionContext StrongContext = WeakContext.MakeStrongExecutionContext();
+			if (FInstanceDataType* LambdaInstanceData = StrongContext.GetInstanceDataPtr<FInstanceDataType>())
 			{
-				// get the instance data inside the lambda
-				const FStateTreeStrongExecutionContext StrongContext = WeakContext.MakeStrongExecutionContext();
-				if (FInstanceDataType* LambdaInstanceData = StrongContext.GetInstanceDataPtr<FInstanceDataType>())
-				{
-					bool bForget = false;
+				// reset the stimulus strength
+				LambdaInstanceData->LastStimulusStrength = 0.0f;
 
-					// are we forgetting the current target?
-					if (SensedActor == LambdaInstanceData->TargetActor)
+				bool bForget = false;
+
+				// are we forgetting the current target?
+				if (SensedActor == LambdaInstanceData->TargetActor)
+				{
+					bForget = true;
+				}
+				else
+				{
+					// are we forgetting about a partial sense while we have no target?
+					if (!IsValid(LambdaInstanceData->TargetActor))
 					{
 						bForget = true;
 					}
-					else
-					{
-						// are we forgetting about a partial sense?
-						if (!IsValid(LambdaInstanceData->TargetActor))
-						{
-							bForget = true;
-						}
-					}
+				}
 
-					if (bForget)
-					{
-						// clear the target
-						LambdaInstanceData->TargetActor = nullptr;
+				if (bForget)
+				{
+					// clear the target
+					LambdaInstanceData->TargetActor = nullptr;
 
-						// clear the flags
-						LambdaInstanceData->bHasInvestigateLocation = false;
-						LambdaInstanceData->bHasTarget = false;
+					// clear the target on the controller
+					LambdaInstanceData->Controller->ClearCurrentTarget();
+					LambdaInstanceData->Controller->ClearFocus(EAIFocusPriority::Gameplay);
 
-						// reset the stimulus strength
-						LambdaInstanceData->LastStimulusStrength = 0.0f;
-
-						// clear the target on the controller
-						LambdaInstanceData->Controller->ClearCurrentTarget();
-						LambdaInstanceData->Controller->ClearFocus(EAIFocusPriority::Gameplay);
-					}
+					// broadcast the forget delegate
+					StrongContext.BroadcastDelegate(LambdaInstanceData->OnForgetEnemyDelegate);
 				}
 			}
-		);
-	}
+		}
+	);
 
 	return EStateTreeRunStatus::Running;
 }
 
 void FStateTreeSenseEnemiesTask::ExitState(FStateTreeExecutionContext& Context, const FStateTreeTransitionResult& Transition) const
 {
-	// have we transitioned to another state?
-	if (Transition.ChangeType == EStateTreeStateChangeType::Changed)
-	{
-		// get the instance data
-		FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
+	// get the instance data
+	FInstanceDataType& InstanceData = Context.GetInstanceData(*this);
 
-		// unbind the perception delegates
-		InstanceData.Controller->OnShooterPerceptionUpdated.Unbind();
-		InstanceData.Controller->OnShooterPerceptionForgotten.Unbind();
-	}
+	// unbind the perception delegates
+	InstanceData.Controller->OnShooterPerceptionUpdated.Unbind();
+	InstanceData.Controller->OnShooterPerceptionForgotten.Unbind();
 }
 
 #if WITH_EDITOR
