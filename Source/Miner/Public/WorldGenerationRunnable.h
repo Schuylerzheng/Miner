@@ -46,7 +46,8 @@ public:
 
 	bool bGenerate = false;
 
-	UPROPERTY(Transient)
+	// Just remove this I guess
+	//UPROPERTY(Transient)
 	TObjectPtr<UDynamicMesh> DynamicMesh;
 
 protected:
