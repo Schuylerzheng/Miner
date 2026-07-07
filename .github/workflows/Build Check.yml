@@ -20,7 +20,7 @@ jobs:
       image: ghcr.io/epicgames/unreal-engine:dev-slim-5.8
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.EPIC_GHCR_PAT }}
+        password: ${{ secrets.UE_CICD_PAT }}
       # Epic's image runs as a non-root `ue4` user by default. That user
       # can't write to the runner's _temp/_runner_file_commands directory
       # that actions/checkout needs for its post-step bookkeeping, which
