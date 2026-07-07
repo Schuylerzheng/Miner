@@ -1,0 +1,17 @@
+# cppcheck can't see Unreal Engine headers since we don't check out the
+# engine in CI, so it will flag every #include of Core Minimal / engine
+# headers as missing. That's expected noise, not a real issue - suppress it.
+missingInclude
+missingIncludeSystem
+
+# UE's reflection macros and generated headers confuse cppcheck's parser
+# in ways the -D defines in the workflow don't fully cover. Suppress the
+# noisiest categories here; remove individual lines as you tune this over
+# time and start trusting the signal.
+unknownMacro
+unmatchedSuppression
+
+# .generated.h files are UHT output we never generate in this workflow
+# (no engine build), so cppcheck will always complain they're missing.
+# This suppresses that specific complaint by file pattern.
+missingInclude:*.generated.h
