@@ -5,9 +5,9 @@ name: Build Check
 # to match your actual workflow.
 on:
   push:
-    branches: [main, development]
+    branches: [master, develop]
   pull_request:
-    branches: [main, development]
+    branches: [master, develop]
 
 jobs:
   build-check:
