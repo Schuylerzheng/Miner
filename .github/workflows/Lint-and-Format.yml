@@ -30,10 +30,10 @@ jobs:
             --language=c++ \
             --std=c++23 \
             -I "${SOURCE_DIR}" \
-            -DUCLASS()= -DUSTRUCT()= -DUENUM()= -DUINTERFACE()= \
-            -DUPROPERTY(...)= -DUFUNCTION(...)= \
-            -DGENERATED_BODY()= -DGENERATED_UCLASS_BODY()= \
-            -DGENERATED_IINTERFACE_BODY()= \
+            -D'UCLASS()=' -D'USTRUCT()=' -D'UENUM()=' -D'UINTERFACE()=' \
+            -D'UPROPERTY(...)=' -D'UFUNCTION(...)=' \
+            -D'GENERATED_BODY()=' -D'GENERATED_UCLASS_BODY()=' \
+            -D'GENERATED_IINTERFACE_BODY()=' \
             --template="{file}:{line}: {severity}: {message} [{id}]" \
             "${SOURCE_DIR}" 2>&1 | tee cppcheck-report.txt
         # cppcheck writes findings to stderr; the pipeline above captures
