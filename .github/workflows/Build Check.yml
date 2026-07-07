@@ -5,9 +5,9 @@ name: Build Check
 # to match your actual workflow.
 on:
   push:
-    branches: [master, develop]
+    branches: [main, development]
   pull_request:
-    branches: [master, develop]
+    branches: [main, development]
 
 jobs:
   build-check:
@@ -20,16 +20,16 @@ jobs:
       image: ghcr.io/epicgames/unreal-engine:dev-slim-5.8
       credentials:
         username: ${{ github.actor }}
-        password: ${{ secrets.UE_CICD_PAT }}
-      # If the compile step fails with permission errors writing to
-      # Intermediate/ or Binaries/, uncomment the line below — the image
-      # runs as a non-root `ue4` user by default, which can conflict with
-      # how Actions mounts the checked-out workspace.
-      # options: --user root
+        password: ${{ secrets.EPIC_GHCR_PAT }}
+      # Epic's image runs as a non-root `ue4` user by default. That user
+      # can't write to the runner's _temp/_runner_file_commands directory
+      # that actions/checkout needs for its post-step bookkeeping, which
+      # throws EACCES. Running the container as root fixes it.
+      options: --user root
 
     steps:
       - name: Checkout (with LFS)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           lfs: true
 
