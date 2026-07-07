@@ -1,0 +1,66 @@
+name: Lint and Format
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# Adjust this to your actual module source folder if it's not Source/Miner
+env:
+  SOURCE_DIR: Source/Miner
+
+jobs:
+  cppcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install cppcheck
+        run: sudo apt-get update && sudo apt-get install -y cppcheck
+
+      - name: Run cppcheck
+        run: |
+          cppcheck \
+            --enable=warning,performance,portability \
+            --inline-suppr \
+            --suppressions-list=.github/cppcheck-suppressions.txt \
+            --error-exitcode=1 \
+            --language=c++ \
+            --std=c++23 \
+            -I "${SOURCE_DIR}" \
+            -D'UCLASS()=' -D'USTRUCT()=' -D'UENUM()=' -D'UINTERFACE()=' \
+            -D'UPROPERTY(...)=' -D'UFUNCTION(...)=' \
+            -D'GENERATED_BODY()=' -D'GENERATED_UCLASS_BODY()=' \
+            -D'GENERATED_IINTERFACE_BODY()=' \
+            --template="{file}:{line}: {severity}: {message} [{id}]" \
+            "${SOURCE_DIR}" 2>&1 | tee cppcheck-report.txt
+        # cppcheck writes findings to stderr; the pipeline above captures
+        # everything to cppcheck-report.txt while still failing the job
+        # via --error-exitcode if real issues are found.
+
+      - name: Upload cppcheck report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cppcheck-report
+          path: cppcheck-report.txt
+
+  clang-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: sudo apt-get update && sudo apt-get install -y clang-format
+
+      - name: Check formatting
+        run: |
+          files=$(find "${SOURCE_DIR}" -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \))
+          if [ -z "$files" ]; then
+            echo "No source files found under ${SOURCE_DIR}"
+            exit 0
+          fi
+          echo "$files" | xargs clang-format --dry-run --Werror
