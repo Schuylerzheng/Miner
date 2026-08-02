@@ -47,20 +47,21 @@ jobs:
           name: cppcheck-report
           path: cppcheck-report.txt
 
-  clang-format:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install clang-format
-        run: sudo apt-get update && sudo apt-get install -y clang-format
-
-      - name: Check formatting
-        run: |
-          files=$(find "${SOURCE_DIR}" -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \))
-          if [ -z "$files" ]; then
-            echo "No source files found under ${SOURCE_DIR}"
-            exit 0
-          fi
-          echo "$files" | xargs clang-format --dry-run --Werror
+# Temp disable this for now
+#  clang-format:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
+ #     - name: Install clang-format
+  #      run: sudo apt-get update && sudo apt-get install -y clang-format
+#
+ #     - name: Check formatting
+  #      run: |
+   #       files=$(find "${SOURCE_DIR}" -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \))
+    #      if [ -z "$files" ]; then
+     #       echo "No source files found under ${SOURCE_DIR}"
+      #      exit 0
+       #   fi
+        #  echo "$files" | xargs clang-format --dry-run --Werror

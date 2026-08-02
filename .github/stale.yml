@@ -1,8 +1,8 @@
 limitPerRun: 1
 
 issues:
-  daysUntilStale: 365
-  daysUntilClose: 20
+  daysUntilStale: 20
+  daysUntilClose: 40
   exemptProjects: true
   exemptMilestones: true
   # Issues with these labels will never be considered stale
@@ -20,6 +20,6 @@ issues:
     from the community in the last year.
     
 pulls:
-  daysUntilStale: 365
-  daysUntilClose: 20
+  daysUntilStale: 20
+  daysUntilClose: 40
   staleLabel: stale

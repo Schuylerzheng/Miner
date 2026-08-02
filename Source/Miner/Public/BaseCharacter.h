@@ -124,19 +124,19 @@ protected:
 	/** Input actions */
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* LeftClickAction;
+	UInputAction* LeftClickAction = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* RightClickAction;
+	UInputAction* RightClickAction = nullptr;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* SprintAction;
+	UInputAction* SprintAction = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* CrouchAction;
+	UInputAction* CrouchAction = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* SwitchItemAction;
+	UInputAction* SwitchItemAction = nullptr;
 
 	/** 
 	* Gameplay Action Stuff (official terminology)

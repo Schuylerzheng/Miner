@@ -111,7 +111,7 @@ void ABaseCharacter::GrantAbilities()
 
 	for (TSubclassOf<UGameplayAbility> AbilityClass : DefaultAbilities)
 	{
-		checkf(IsValid(AbilityClass), TEXT("Ability Class invalid while trying to grant abilities. Ability type: %s"), ANSI_TO_TCHAR(typeid(AbilityClass).name()));
+		checkf(IsValid(AbilityClass), TEXT("Ability Class invalid while trying to grant abilities. Ability type: %s"), *GetNameSafe(AbilityClass));
 
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, CurrentAbilityIndex, this));
 
